@@ -1,6 +1,6 @@
 // Antes de debugar instale a biblioteca pdf-img-convert
 // npm install pdf-img-convert
-// mais informaçôes: https://github.com/ol-th/pdf-img-convert.js
+// mais informaçôes em: https://github.com/ol-th/pdf-img-convert.js
 
 
 var pdf2img = require('pdf-img-convert');
@@ -81,4 +81,3 @@ async function convert (fileData__path, fileData__type) {
     };
 };
     
-
