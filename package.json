@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "jsdom": "^19.0.0",
+    "pdf-img-convert": "^1.0.5"
+  }
+}
