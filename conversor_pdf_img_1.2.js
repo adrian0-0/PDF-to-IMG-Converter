@@ -2,9 +2,6 @@ const pdf2img = require('pdf-img-convert');
 const jsdom = require("jsdom");
 const fs = require('fs');
 const { JSDOM } = jsdom;
-var pdflib = require('pdfjs-dist/build/pdf.js');
-import pdfjsWorker from 'pdfjs-dist/build/pdf.worker.js';
-pdflib.GlobalWorkerOptions.workerPort = new pdfjsWorker();
 
 const html__Content = `
 <!DOCTYPE html>
