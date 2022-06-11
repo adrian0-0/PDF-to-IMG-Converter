@@ -15,8 +15,9 @@
 </ul>
 
 <h3><p>Modo de excução do script:</p></h3>
-<p>Exemplo: node index.js format width/scale</p>
+<p>Exemplo: node index.js path format width/scale</p>
 <ol>
+    <li><p>path: defina o diretório do pdf</p></li>
     <li><p>format: escolha dentre jpg ou png para a conversão</p></li>
     <li><p>width/scale: defina a largura da conversão em number</p></li>
 </ol>
