@@ -3,8 +3,8 @@
 <h2><p>Bibliotecas usadas</p></h2>
 
 <ul>
-    <li><p>pdf-img-convert</p></li>
-    <li><p>jsdom</p></li>
+    <li><p><a href = "https://github.com/ol-th/pdf-img-convert.js#readme">pdf-img-convert</a></p></li>
+    <li><p><a href = "https://github.com/jsdom/jsdom#readme">jsdom</a></p></li>
 </ul>
 
 <h3><p>NPM de instalação:</p></h3>
