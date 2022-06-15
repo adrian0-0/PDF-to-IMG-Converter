@@ -49,7 +49,8 @@ function convert(terminal__arg) {
         format: terminal__arg[3],
         out_dir: path__name,
         out_prefix: pdf__name,
-        page: null
+        page: 1,
+        scale: 3000
     }
 
     pdf.convert(file, opts)
@@ -63,22 +64,22 @@ function convert(terminal__arg) {
     pdf.info(file)
     .then(pdfinfo => {
         _page__array = pdfinfo.pages
-        edit__html(_page__array, path__name, pdf__name);
+        edit__html(_page__array, path__name, pdf__name, terminal__arg[3]);
     });
     
 } 
 
 //Realiza alteraçôes no html
-function edit__html(pages, path__name, pdf__name) {
+function edit__html(pages, path__name, pdf__name, format) {
     for  (i ; i<=9; i++) {
         document.querySelector("#block").innerHTML += (`
-            <img src="${path__name}/${pdf__name}-0${i}.jpg" alt="" style="width: 100%; max-width: none;">
+            <img src="${path__name}/${pdf__name}-0${i}.${format}" alt="" style="width: 100%; max-width: none;">
             <br>`);
             i++;
         if (i >= 10) {
             for (c = 10; c<=pages; c++) {
                 document.querySelector("#block").innerHTML += (`
-            <img src="${path__name}/${pdf__name}-${c}.jpg" alt="" style="width: 100%; max-width: none;">
+            <img src="${path__name}/${pdf__name}-${c}.${format}" alt="" style="width: 100%; max-width: none;">
             <br>`)
             }
         }
