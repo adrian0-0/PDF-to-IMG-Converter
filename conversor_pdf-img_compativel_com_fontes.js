@@ -22,7 +22,6 @@ let document = dom.window.document;
 let c =0
 let i = 1;
 let _page__array = 0;
-let count = 0
 
 let data = new Date()
 let month = (data.getMonth() + 1).toString().padStart(2, "0");
@@ -38,28 +37,26 @@ _terminal__arg.forEach(function terminal__arg (input, index) {
 
 //Renomeia os arquivos de imagem e o path inbutido
 function renomear(terminal__arg) {
-    let file = terminal__arg[2]
-    let file__split = file.split((/[ /\r\n/\\]+/))
-    file__split.pop();
-    let path__name = file__split.join("/");
-    
+    let file = terminal__arg[2]    
     let file__rename = file.split(/[ ./\r\n/\\]+/)
     let pdf__name = file__rename.slice(-2) [0];
     
-    console.log(path__name)
-    console.log(pdf__name)
-    convert(terminal__arg, file, path__name, pdf__name); 
+    convert(terminal__arg, file, pdf__name); 
 
 }
 
 // Converte o diretório do pdf as para o formato selecionado 
-function convert(terminal__arg, file, path__name, pdf__name) {
+function convert(terminal__arg, file, pdf__name) {
 
+// Cria a folder padrão
+    fs.mkdir('./dist', { recursive: true }, (err) => {
+        if (err) throw err;
+      });
 
-//Declaraçôes do path e formato da imagem
+// Declaraçôes do path e formato da imagem
     let opts = {
         format: terminal__arg[3],
-        out_dir: path__name,
+        out_dir: "./dist",
         out_prefix: pdf__name,
         page: null,
         scale: 3000
@@ -72,23 +69,24 @@ function convert(terminal__arg, file, path__name, pdf__name) {
     .catch(error => {
         console.error(error);
     })
+
 //Envia info da remomeação para a edição do html 
     pdf.info(file)
     .then(pdfinfo => {
         _page__array = pdfinfo.pages
-        edit__html(_page__array, path__name, pdf__name, terminal__arg[3], cache_data);
+        edit__html(_page__array, pdf__name, terminal__arg[3], cache_data);
     });
     
 } 
 
 //Realiza alteraçôes no html
-function edit__html(pages, path__name, pdf__name, format, cache_data) {
+function edit__html(pages, pdf__name, format, cache_data) {
 
     if  (pages > 9) {
         for (c; c<pages; c++) {
             let page_count = i.toString().padStart(2, "0");
             document.querySelector("#block").innerHTML += (`
-            <img src="${path__name}/${pdf__name}-${page_count}.${format}?=${cache_data}" alt="" style="width: 100%; max-width: none;">
+            <img src="./dist/${pdf__name}-${page_count}.${format}?=${cache_data}" alt="" style="width: 100%; max-width: none;">
             <br>`);
             i++;
         }   
@@ -97,7 +95,7 @@ function edit__html(pages, path__name, pdf__name, format, cache_data) {
     else if (pages <= 9) {
         for (c; c<pages; c++) {
             document.querySelector("#block").innerHTML += (`
-            <img src="${path__name}/${pdf__name}-${i}.${format}?=${cache_data}" alt="" style="width: 100%; max-width: none;">
+            <img src="./dist/${pdf__name}-${i}.${format}?=${cache_data}" alt="" style="width: 100%; max-width: none;">
             <br>`);
             i++;
         }        
