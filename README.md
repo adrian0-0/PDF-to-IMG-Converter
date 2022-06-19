@@ -5,8 +5,9 @@
 <a href="https://github.com/kb47/pdf-poppler#readme">pdf-poppler</a>
 
 <h3>Modo de uso:</h3>
-<code>node convert.js ./sample.pdf jpeg</code>
+<code>node convert.js ./sample.pdf jpeg 3000</code>
 <ul>
     <li>node argument: filename</li>
     <li>node argument: extensão da imagem (png ou jpeg)</li>
+    <li>node argument: scale de qualidade</li>
 <ul>
