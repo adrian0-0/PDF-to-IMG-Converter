@@ -32,7 +32,7 @@ let _terminal_arg = process.argv;
 _terminal_arg.forEach(function terminal__arg (input, index) {
     console.log(`${index}: ${input}`)
 });
-
+//page
 //Renomeia os arquivos de imagem e o path inbutido
 function renomear(terminal__arg) {
     let file = terminal__arg[2]    
