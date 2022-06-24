@@ -1,0 +1,14 @@
+{   
+    "stores": {
+        "cabana": {
+            "formato": "png",
+            "scale":3000
+        },
+        "fribal": {
+            "formato": "jpg",
+            "scale":3500
+        }
+    }
+}
+
+     
