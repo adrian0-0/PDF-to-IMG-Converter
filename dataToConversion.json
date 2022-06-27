@@ -2,11 +2,13 @@
     "stores": {
         "cabana": {
             "formato": "png",
-            "scale":3000
+            "scale":3000,
+            "name": "cabana"
         },
         "emporio": {
             "formato": "jpg",
-            "scale":3000
+            "scale":3000,
+            "name": "emporio"
         }
     }
 }

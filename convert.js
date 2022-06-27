@@ -39,7 +39,7 @@ function dataToConversion(terminal__arg) {
         if (err) throw err;
         
         jsonData = JSON.parse(data);
-        terminal__arg[3].toLowerCase()
+        terminal__arg[3].toLowerCase();
 
         Object.keys(jsonData.stores).forEach(key => {
             if (key == terminal__arg[3]) {
@@ -52,7 +52,7 @@ function dataToConversion(terminal__arg) {
 
 // Converte o diretório do pdf as para o formato selecionado 
 function convert(terminal__arg, index) {
-    let storeData = jsonData.stores[index];
+    let storeData = jsonData.stores;
     
     function capitalizeFirstLetter(string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
@@ -62,6 +62,8 @@ function convert(terminal__arg, index) {
     fs.mkdir('./dist', { recursive: true }, (err) => {
         if (err) throw err;
     });
+
+ 
 
 // Declaraçôes do path e formato da imagem
     let opts = {
@@ -80,10 +82,25 @@ function convert(terminal__arg, index) {
         console.error(error);
     })
 
+    function storeLog(title, data, folder) {
+        str = JSON.stringify(storeData[index])
+        console.log(str.stores)
+        const logContent = `
+        Nome do PDF: ${title}
+        Data de criação: ${data}
+        Folder: ${folder}
+        Config: ${str}
+        `
+        fs.writeFile(`${opts.out_dir}/.log` ,`${logContent}` ,function(error) {
+            if (error) throw error;
+        });
+    };
+
 //Envia info da remomeação para a edição do html 
     pdf.info(terminal__arg[2])
     .then(pdfinfo => {
         _page_array = pdfinfo.pages
+        storeLog(pdfinfo.title, data, terminal__arg[2], storeData[index])
         edit__html(_page_array, storeData.formato, cache_data, opts.out_dir, capitalizeFirstLetter(index));
     });
     
@@ -121,4 +138,6 @@ function create__html(standard_folder) {
     });
 }
 
-dataToConversion(_terminal_arg)
+//Armazena o log em file
+
+dataToConversion(_terminal_arg);
