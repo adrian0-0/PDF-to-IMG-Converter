@@ -10,7 +10,7 @@ const htmlContent = `
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cárdapio Cabana do Sol</title>
+    <title></title>
 </head>
 <body></body>
 </html>
@@ -53,7 +53,10 @@ function dataToConversion(terminal__arg) {
 // Converte o diretório do pdf as para o formato selecionado 
 function convert(terminal__arg, index) {
     let storeData = jsonData.stores[index];
-    console.log(storeData.formato);
+    
+    function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+      }
 
 // Cria a folder padrão
     fs.mkdir('./dist', { recursive: true }, (err) => {
@@ -81,13 +84,14 @@ function convert(terminal__arg, index) {
     pdf.info(terminal__arg[2])
     .then(pdfinfo => {
         _page_array = pdfinfo.pages
-        edit__html(_page_array, storeData.formato, cache_data, opts.out_dir);
+        edit__html(_page_array, storeData.formato, cache_data, opts.out_dir, capitalizeFirstLetter(index));
     });
     
 } 
 
 //Realiza alteraçôes no html
-function edit__html(pages, format, cache_data, standard_folder) {
+function edit__html(pages, format, cache_data, standard_folder, storeName) {
+    document.querySelector("title").innerHTML = `Cárdapio ${storeName}`
 
     if  (pages > 9) {
         for (c; c<pages; c++) {
