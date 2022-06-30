@@ -9,4 +9,8 @@
 <ul>
     <li>node argument: filename</li>
     <li>node argument: pdf-config(cabana ou emporio)</li>
-<ul>
+</ul>
+
+<h4>Adição de novas configurações PDF-JSON</h4>
+<p>Caso adiciona uma nova configuração introduza no diretório ./pdf_config</p>
+<p>O node argument para executar a nova configuração, será de acordo com o nome do arquivo JSON</p>

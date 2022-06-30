@@ -21,7 +21,7 @@ let pdf_name = "page";
 let c =0;
 let i = 1;
 let _page_array = 0;
-let jsPath = ['./pdf_config/cabana.json', './pdf_config/emporio.json'];
+let jsonPath = './pdf_config/';
 
 let data = new Date()
 let month = (data.getMonth() + 1).toString().padStart(2, "0");
@@ -30,46 +30,48 @@ let cache_data = day+month;
 
 // Recebe os args inputados no terminal (path do diretório / formato da imagem)
 let _terminal_arg = process.argv;
-_terminal_arg.forEach(function terminal__arg (input, index) {
+_terminal_arg.forEach(function terminal_arg (input, index) {
     console.log(`${index}: ${input}`)
     
 });
 
+//Leitura da configuração do file json
+function readConfig(terminal_arg) {
+    fs.readdir(jsonPath, (err, data) => {
+        if (err) throw err;
 
-function dataToConversion(terminal__arg) {
-    fs.readFile('dataToConversion.json', (err, data) => {
+
+        Object.keys(data).forEach(key => {
+
+            let configName = data[key].replace('.json','');
+            if (configName == terminal_arg[3]) {
+                dataToConversion(terminal_arg, data[key], configName)
+            };
+        });
+    });
+};
+
+function dataToConversion(terminal_arg, config, configName) {
+    console.log(jsonPath+config)
+    fs.readFile(`${jsonPath}${config}`, (err, data) => {
         if (err) throw err;
         
         jsonData = JSON.parse(data);
-        console.log(jsonData)
-        terminal__arg[3].toLowerCase();
+        console.log(jsonData);
 
-        Object.keys(jsonData.stores).forEach(key => {
-            if (key == terminal__arg[3]) {
-                convert(terminal__arg, key)
-
-            };           
-          });
+        terminal_arg[3].toLowerCase();
+        convert(terminal_arg, jsonData, configName);
       });
-
-    // fs.readdir('./pdf_config', (err, data) => {
-    //     if (err) throw err;
-
-    //     for (i = 0; i <= data.length; i++) {
-    //         data = data[1].replace('.json', '')
-    //         console.log(data[i])
-    //     }
-    // });
 }
 
+
 // Converte o diretório do pdf as para o formato selecionado 
-function convert(terminal__arg, index) {
-    let storeData = jsonData.stores[index];
-    console.log(storeData)
-    
+function convert(terminal_arg, jsonData, configName) {
+
+//Capitalização do titulo do titulo
     function capitalizeFirstLetter(string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
-      }
+    };
 
 // Cria a folder padrão
     fs.mkdir('./dist', { recursive: true }, (err) => {
@@ -80,14 +82,14 @@ function convert(terminal__arg, index) {
 
 // Declaraçôes do path e formato da imagem
     let opts = {
-        format: storeData.extension,
+        format: jsonData.extension,
         out_dir: "./dist",
-        out_prefix: pdf_name,
+        out_prefix: "page",
         page: null,
-        scale: storeData.height
-    }
+        scale: jsonData.height
+    };
 
-    pdf.convert(terminal__arg[2], opts)
+    pdf.convert(terminal_arg[2], opts)
     .then(res => {
         console.log('Conversão concluida!');
     })
@@ -95,25 +97,11 @@ function convert(terminal__arg, index) {
         console.error(error);
     })
 
-    function storeLog(title, data, folder) {
-        str = JSON.stringify(storeData)
-        const logContent = `
-        Nome do PDF: ${title}
-        Data de criação: ${data}
-        Folder: ${folder}
-        Config: ${str}
-        `
-        fs.writeFile(`${opts.out_dir}/.log` ,`${logContent}` ,function(error) {
-            if (error) throw error;
-        });
-    };
-
 //Envia info da remomeação para a edição do html 
-    pdf.info(terminal__arg[2])
+    pdf.info(terminal_arg[2])
     .then(pdfinfo => {
         _page_array = pdfinfo.pages
-        storeLog(pdfinfo.title, data, terminal__arg[2], storeData[index])
-        edit__html(_page_array, storeData.extension, cache_data, opts.out_dir, capitalizeFirstLetter(index));
+        edit__html(_page_array, jsonData.extension, cache_data, opts.out_dir, capitalizeFirstLetter(configName));
     });
     
 } 
@@ -150,6 +138,4 @@ function create__html(standard_folder) {
     });
 }
 
-//Armazena o log em file
-
-dataToConversion(_terminal_arg);
+readConfig(_terminal_arg);
