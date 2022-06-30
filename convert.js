@@ -15,12 +15,13 @@ const htmlContent = `
 <body></body>
 </html>
 `
-let dom = new JSDOM(`${htmlContent}`);
-let document = dom.window.document;
-let pdf_name = "page"
-let c =0
+const dom = new JSDOM(`${htmlContent}`);
+const document = dom.window.document;
+let pdf_name = "page";
+let c =0;
 let i = 1;
 let _page_array = 0;
+let jsPath = ['./pdf_config/cabana.json', './pdf_config/emporio.json'];
 
 let data = new Date()
 let month = (data.getMonth() + 1).toString().padStart(2, "0");
@@ -34,11 +35,13 @@ _terminal_arg.forEach(function terminal__arg (input, index) {
     
 });
 
+
 function dataToConversion(terminal__arg) {
     fs.readFile('dataToConversion.json', (err, data) => {
         if (err) throw err;
         
         jsonData = JSON.parse(data);
+        console.log(jsonData)
         terminal__arg[3].toLowerCase();
 
         Object.keys(jsonData.stores).forEach(key => {
@@ -48,11 +51,21 @@ function dataToConversion(terminal__arg) {
             };           
           });
       });
+
+    // fs.readdir('./pdf_config', (err, data) => {
+    //     if (err) throw err;
+
+    //     for (i = 0; i <= data.length; i++) {
+    //         data = data[1].replace('.json', '')
+    //         console.log(data[i])
+    //     }
+    // });
 }
 
 // Converte o diretório do pdf as para o formato selecionado 
 function convert(terminal__arg, index) {
-    let storeData = jsonData.stores;
+    let storeData = jsonData.stores[index];
+    console.log(storeData)
     
     function capitalizeFirstLetter(string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
@@ -67,11 +80,11 @@ function convert(terminal__arg, index) {
 
 // Declaraçôes do path e formato da imagem
     let opts = {
-        format: storeData.formato,
+        format: storeData.extension,
         out_dir: "./dist",
         out_prefix: pdf_name,
         page: null,
-        scale: storeData.scale
+        scale: storeData.height
     }
 
     pdf.convert(terminal__arg[2], opts)
@@ -83,8 +96,7 @@ function convert(terminal__arg, index) {
     })
 
     function storeLog(title, data, folder) {
-        str = JSON.stringify(storeData[index])
-        console.log(str.stores)
+        str = JSON.stringify(storeData)
         const logContent = `
         Nome do PDF: ${title}
         Data de criação: ${data}
@@ -101,7 +113,7 @@ function convert(terminal__arg, index) {
     .then(pdfinfo => {
         _page_array = pdfinfo.pages
         storeLog(pdfinfo.title, data, terminal__arg[2], storeData[index])
-        edit__html(_page_array, storeData.formato, cache_data, opts.out_dir, capitalizeFirstLetter(index));
+        edit__html(_page_array, storeData.extension, cache_data, opts.out_dir, capitalizeFirstLetter(index));
     });
     
 } 
@@ -114,7 +126,7 @@ function edit__html(pages, format, cache_data, standard_folder, storeName) {
         for (c; c<pages; c++) {
             let page_count = i.toString().padStart(2, "0");
     document.querySelector("body").innerHTML += (`
-    <img src="./${pdf_name}-${page_count}.${format}?=${cache_data}" alt="" style="width: 100%; max-width: none;"><br>`);
+    <img src="./${pdf_name}-${page_count}.${format}?t=${cache_data}" alt="" style="width: 100%; max-width: none;"><br>`);
     i++;
         }   
     }
@@ -122,7 +134,7 @@ function edit__html(pages, format, cache_data, standard_folder, storeName) {
     else if (pages <= 9) {
         for (c; c<pages; c++) {
     document.querySelector("body").innerHTML += (`
-    <img src="./${pdf_name}-${i}.${format}?=${cache_data}" alt="" style="width: 100%; max-width: none;"><br>`);
+    <img src="./${pdf_name}-${i}.${format}?t=${cache_data}" alt="" style="width: 100%; max-width: none;"><br>`);
     i++;
         }        
     }
