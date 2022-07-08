@@ -1,5 +1,6 @@
 {
-    "name": "cabana",
+    "title": "Cabana",
+    "dir": "cabana_vip",
     "extension": "png",
     "height": "3000" 
 }

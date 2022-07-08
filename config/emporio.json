@@ -1,5 +1,6 @@
 {
-    "name": "emporio",
+    "title": "Emporio",
+    "dir": "emporio",
     "extension": "jpg",
     "height": "3000"
 }

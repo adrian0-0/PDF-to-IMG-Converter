@@ -20,7 +20,7 @@ const document = dom.window.document;
 let pdf_name = "page";
 let c =0; let i = 1; let v = 0; l =1;
 let _page_array = 0;
-let jsonPath = './pdf_config/';
+let jsonPath = './config/';
 
 let data = new Date()
 let month = (data.getMonth() + 1).toString().padStart(2, "0");
@@ -74,7 +74,7 @@ while(v < pdf_chunkConfig.length) {
             
             Object.keys(data).forEach(key => {
                 let configName = data[key].replace('.json','');
-                if (configName == terminal_arg[1]) {
+                if (configName == terminal_arg[0]) {
                     dataToConversion(terminal_arg, data[key], configName)
                 };
             });
@@ -87,7 +87,7 @@ while(v < pdf_chunkConfig.length) {
             if (err) throw err;
             jsonData = JSON.parse(data);
 
-            terminal_arg[1].toLowerCase();
+            terminal_arg[0].toLowerCase();
             convert(terminal_arg, jsonData, configName);
         });
     }
@@ -97,13 +97,6 @@ while(v < pdf_chunkConfig.length) {
     function convert(terminal_arg, jsonData, configName) {
 
         console.log(terminal_arg, jsonData, configName);
-
-    //Capitalização do titulo do titulo
-        function capitalizeFirstLetter(string) {
-            return string.charAt(0).toUpperCase() + string.slice(1);
-        };
-
-    // Cria a folder padrão
 
 
     // Declaraçôes do path e formato da imagem
@@ -115,11 +108,11 @@ while(v < pdf_chunkConfig.length) {
             scale: jsonData.height
         };
 
-        pdf.convert(terminal_arg[0], opts)
+        pdf.convert(terminal_arg[1], opts)
         .then(res => {
             console.log('Conversão concluida!');
 
-            edit__html(_page_array, jsonData.extension, cache_data, opts.out_dir, capitalizeFirstLetter(configName));
+            edit__html(_page_array, jsonData.extension, cache_data, opts.out_dir, jsonData.title);
 
         })
         .catch(error => {
@@ -127,7 +120,7 @@ while(v < pdf_chunkConfig.length) {
         })
 
     //Envia info da remomeação para a edição do html 
-        pdf.info(terminal_arg[0])
+        pdf.info(terminal_arg[1])
         .then(pdfinfo => {
             _page_array = pdfinfo.pages
         });
@@ -135,8 +128,8 @@ while(v < pdf_chunkConfig.length) {
     } 
 
     //Realiza alteraçôes no html
-    function edit__html(pages, format, cache_data, standard_folder, storeName) {
-        document.querySelector("title").innerHTML = `Cárdapio ${storeName}`
+    function edit__html(pages, format, cache_data, standard_folder, title) {
+        document.querySelector("title").innerHTML = `Cárdapio ${title}`
 
         if  (pages > 9) {
             for (c; c<pages; c++) {
