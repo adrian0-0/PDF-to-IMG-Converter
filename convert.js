@@ -18,8 +18,7 @@ const htmlContent = `
 const dom = new JSDOM(`${htmlContent}`);
 const document = dom.window.document;
 let pdf_name = "page";
-let c =0;
-let i = 1;
+let c =0; let i = 1; let v = 0; l =1;
 let _page_array = 0;
 let jsonPath = './pdf_config/';
 
@@ -35,130 +34,266 @@ _terminal_arg.forEach(function terminal_arg (input, index) {
 
 });
 
-//Leitura da configuração do file json
-function readConfig(terminal_arg) {
-    fs.readdir(jsonPath, (err, data) => {
-        if (err) throw err;
+let pdfCount = _terminal_arg.slice();
+pdfCount.splice(0, 2);
 
+const perChunk = 2 // args recebidos por chunk    
 
-        Object.keys(data).forEach(key => {
+const inputArray = pdfCount
 
-            let configName = data[key].replace('.json','');
-            if (configName == terminal_arg[3]) {
-                dataToConversion(terminal_arg, data[key], configName)
-            };
+const pdf_chunkConfig = inputArray.reduce((resultArray, item, index) => { 
+  const chunkIndex = Math.floor(index/perChunk)
+
+  if(!resultArray[chunkIndex]) {
+    resultArray[chunkIndex] = [] 
+  }
+
+  resultArray[chunkIndex].push(item)
+    
+  return resultArray;
+}, [])
+
+fs.mkdir('./dist', { recursive: true }, (err) => {
+    if (err) throw err;
+});
+
+while(v < pdf_chunkConfig.length) {
+     function folderNum(folderNum) {
+            folderNum = `./dist/dir0${l}`
+
+            fs.mkdir(folderNum, { recursive: true }, (err) => {
+                if (err) throw err;
+            });
+            l++;
+            return(folderNum)
+        }
+    //Leitura da configuração do file json
+    function readConfig(terminal_arg) {
+        fs.readdir(jsonPath, (err, data) => {
+            if (err) throw err;
+            
+            Object.keys(data).forEach(key => {
+                let configName = data[key].replace('.json','');
+                if (configName == terminal_arg[1]) {
+                    dataToConversion(terminal_arg, data[key], configName)
+                };
+            });
         });
-    });
-};
+    };
 
-function dataToConversion(terminal_arg, config, configName) {
-    fs.readFile(`${jsonPath}${config}`, (err, data) => {
-        if (err) throw err;
+    function dataToConversion(terminal_arg, config, configName) {
+
+        fs.readFile(`${jsonPath}${config}`, (err, data) => {
+            if (err) throw err;
+            jsonData = JSON.parse(data);
+
+            terminal_arg[1].toLowerCase();
+            convert(terminal_arg, jsonData, configName);
+        });
+    }
+
+
+    // Converte o diretório do pdf as para o formato selecionado 
+    function convert(terminal_arg, jsonData, configName) {
+
+        console.log(terminal_arg, jsonData, configName);
+
+    //Capitalização do titulo do titulo
+        function capitalizeFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        };
+
+    // Cria a folder padrão
+
+
+    // Declaraçôes do path e formato da imagem
+        let opts = {
+            format: jsonData.extension,
+            out_dir: folderNum(folderNum),
+            out_prefix: "page",
+            page: null,
+            scale: jsonData.height
+        };
+
+        pdf.convert(terminal_arg[0], opts)
+        .then(res => {
+            console.log('Conversão concluida!');
+
+            edit__html(_page_array, jsonData.extension, cache_data, opts.out_dir, capitalizeFirstLetter(configName));
+
+        })
+        .catch(error => {
+            console.error(error);
+        })
+
+    //Envia info da remomeação para a edição do html 
+        pdf.info(terminal_arg[0])
+        .then(pdfinfo => {
+            _page_array = pdfinfo.pages
+        });
         
-        jsonData = JSON.parse(data);
+    } 
 
-        terminal_arg[3].toLowerCase();
-        convert(terminal_arg, jsonData, configName);
-      });
+    //Realiza alteraçôes no html
+    function edit__html(pages, format, cache_data, standard_folder, storeName) {
+        document.querySelector("title").innerHTML = `Cárdapio ${storeName}`
+
+        if  (pages > 9) {
+            for (c; c<pages; c++) {
+                let page_count = i.toString().padStart(2, "0");
+        document.querySelector("body").innerHTML += (`
+        <img src="./${pdf_name}-${page_count}.${format}?t=${cache_data}" alt="" style="width: 100%; max-width: none;"><br>`);
+        i++;
+            }   
+        }
+
+        else if (pages <= 9) {
+            for (c; c<pages; c++) {
+        document.querySelector("body").innerHTML += (`
+        <img src="./${pdf_name}-${i}.${format}?t=${cache_data}" alt="" style="width: 100%; max-width: none;"><br>`);
+        i++;
+            }        
+        }
+        create__html(standard_folder);                 
+    }
+
+
+    //Realiza a escrita do html
+    function create__html(standard_folder) {
+        fs.writeFile(`${standard_folder}/index.html`, document.documentElement.innerHTML, function(error) {
+            console.log(document.documentElement.innerHTML)
+            if (error) throw error;
+        });
+    }
+
+    readConfig(pdf_chunkConfig[v]);
+    v++;
 }
 
 
-// Converte o diretório do pdf as para o formato selecionado 
-function convert(terminal_arg, jsonData, configName) {
-    let pdfCount = terminal_arg.slice();
-    pdfCount.splice(0, 2);
-    console.log(pdfCount.length%2)
+// //Leitura da configuração do file json
+// function readConfig(terminal_arg) {
+//     fs.readdir(jsonPath, (err, data) => {
+//         if (err) throw err;
 
 
-// Mais informações sobre: 
-// https://www.w3resource.com/javascript-exercises/fundamental/javascript-fundamental-exercise-265.php
-// https://stackoverflow.com/questions/8495687/split-array-into-chunks
+//         Object.keys(data).forEach(key => {
 
-    const perChunk = 2 // items per chunk    
+//             let configName = data[key].replace('.json','');
+//             if (configName == terminal_arg[3]) {
+//                 dataToConversion(terminal_arg, data[key], configName)
+//             };
+//         });
+//     });
+// };
 
-    const inputArray = pdfCount
-    
-    const result = inputArray.reduce((resultArray, item, index) => { 
-      const chunkIndex = Math.floor(index/perChunk)
-    
-      if(!resultArray[chunkIndex]) {
-        resultArray[chunkIndex] = [] 
-      }
-    
-      resultArray[chunkIndex].push(item)
+// function dataToConversion(terminal_arg, config, configName) {
+//     fs.readFile(`${jsonPath}${config}`, (err, data) => {
+//         if (err) throw err;
         
-      return resultArray
-    }, [])
-    
-    console.log(result[1]);
-//Capitalização do titulo do titulo
-    function capitalizeFirstLetter(string) {
-        return string.charAt(0).toUpperCase() + string.slice(1);
-    };
+//         jsonData = JSON.parse(data);
 
-// Cria a folder padrão
-    fs.mkdir('./dist', { recursive: true }, (err) => {
-        if (err) throw err;
-    });
+//         terminal_arg[3].toLowerCase();
+//         convert(terminal_arg, jsonData, configName);
+//       });
+// }
+
+
+// // Converte o diretório do pdf as para o formato selecionado 
+// function convert(terminal_arg, jsonData, configName) {
+//     let pdfCount = terminal_arg.slice();
+//     pdfCount.splice(0, 2);
+
+
+// // Mais informações sobre: 
+// // https://www.w3resource.com/javascript-exercises/fundamental/javascript-fundamental-exercise-265.php
+// // https://stackoverflow.com/questions/8495687/split-array-into-chunks
+
+//     // const perChunk = 2 // items per chunk    
+
+//     // const inputArray = pdfCount
+    
+//     // const pdf_chunkConfig = inputArray.reduce((resultArray, item, index) => { 
+//     //   const chunkIndex = Math.floor(index/perChunk)
+    
+//     //   if(!resultArray[chunkIndex]) {
+//     //     resultArray[chunkIndex] = [] 
+//     //   }
+    
+//     //   resultArray[chunkIndex].push(item)
+        
+//     //   return resultArray;
+//     // }, [])
+    
+//     // console.log(pdf_chunkConfig);
+// //Capitalização do titulo do titulo
+//     function capitalizeFirstLetter(string) {
+//         return string.charAt(0).toUpperCase() + string.slice(1);
+//     };
+
+// // Cria a folder padrão
+//     fs.mkdir('./dist', { recursive: true }, (err) => {
+//         if (err) throw err;
+//     });
 
  
 
-// Declaraçôes do path e formato da imagem
-    let opts = {
-        format: jsonData.extension,
-        out_dir: "./dist",
-        out_prefix: "page",
-        page: null,
-        scale: jsonData.height
-    };
+// // Declaraçôes do path e formato da imagem
+//     let opts = {
+//         format: jsonData.extension,
+//         out_dir: "./dist",
+//         out_prefix: "page",
+//         page: null,
+//         scale: jsonData.height
+//     };
 
-    pdf.convert(terminal_arg[2], opts)
-    .then(res => {
-        console.log('Conversão concluida!');
-    })
-    .catch(error => {
-        console.error(error);
-    })
+//     pdf.convert(terminal_arg[0], opts)
+//     .then(res => {
+//         console.log('Conversão concluida!');
+//     })
+//     .catch(error => {
+//         console.error(error);
+//     })
 
-//Envia info da remomeação para a edição do html 
-    // pdf.info(terminal_arg[2])
-    // .then(pdfinfo => {
-    //     _page_array = pdfinfo.pages
-    //     edit__html(_page_array, jsonData.extension, cache_data, opts.out_dir, capitalizeFirstLetter(configName));
-    // });
+// //Envia info da remomeação para a edição do html 
+//     // pdf.info(terminal_arg[0])
+//     // .then(pdfinfo => {
+//     //     _page_array = pdfinfo.pages
+//     //     edit__html(_page_array, jsonData.extension, cache_data, opts.out_dir, capitalizeFirstLetter(configName));
+//     // });
     
-} 
+// } 
 
-//Realiza alteraçôes no html
-function edit__html(pages, format, cache_data, standard_folder, storeName) {
-    document.querySelector("title").innerHTML = `Cárdapio ${storeName}`
+// //Realiza alteraçôes no html
+// function edit__html(pages, format, cache_data, standard_folder, storeName) {
+//     document.querySelector("title").innerHTML = `Cárdapio ${storeName}`
 
-    if  (pages > 9) {
-        for (c; c<pages; c++) {
-            let page_count = i.toString().padStart(2, "0");
-    document.querySelector("body").innerHTML += (`
-    <img src="./${pdf_name}-${page_count}.${format}?t=${cache_data}" alt="" style="width: 100%; max-width: none;"><br>`);
-    i++;
-        }   
-    }
+//     if  (pages > 9) {
+//         for (c; c<pages; c++) {
+//             let page_count = i.toString().padStart(2, "0");
+//     document.querySelector("body").innerHTML += (`
+//     <img src="./${pdf_name}-${page_count}.${format}?t=${cache_data}" alt="" style="width: 100%; max-width: none;"><br>`);
+//     i++;
+//         }   
+//     }
 
-    else if (pages <= 9) {
-        for (c; c<pages; c++) {
-    document.querySelector("body").innerHTML += (`
-    <img src="./${pdf_name}-${i}.${format}?t=${cache_data}" alt="" style="width: 100%; max-width: none;"><br>`);
-    i++;
-        }        
-    }
-    create__html(standard_folder);                 
-}
+//     else if (pages <= 9) {
+//         for (c; c<pages; c++) {
+//     document.querySelector("body").innerHTML += (`
+//     <img src="./${pdf_name}-${i}.${format}?t=${cache_data}" alt="" style="width: 100%; max-width: none;"><br>`);
+//     i++;
+//         }        
+//     }
+//     create__html(standard_folder);                 
+// }
 
 
-//Realiza a escrita do html
-function create__html(standard_folder) {
-    fs.writeFile(`${standard_folder}/index.html`, document.documentElement.innerHTML, function(error) {
-        console.log(document.documentElement.innerHTML)
-        if (error) throw error;
-    });
-}
+// //Realiza a escrita do html
+// function create__html(standard_folder) {
+//     fs.writeFile(`${standard_folder}/index.html`, document.documentElement.innerHTML, function(error) {
+//         console.log(document.documentElement.innerHTML)
+//         if (error) throw error;
+//     });
+// }
 
-readConfig(_terminal_arg);
+// readConfig(_terminal_arg);
