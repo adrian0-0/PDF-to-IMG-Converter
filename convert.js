@@ -32,7 +32,7 @@ let cache_data = day+month;
 let _terminal_arg = process.argv;
 _terminal_arg.forEach(function terminal_arg (input, index) {
     console.log(`${index}: ${input}`)
-    
+
 });
 
 //Leitura da configuração do file json
@@ -52,12 +52,10 @@ function readConfig(terminal_arg) {
 };
 
 function dataToConversion(terminal_arg, config, configName) {
-    console.log(jsonPath+config)
     fs.readFile(`${jsonPath}${config}`, (err, data) => {
         if (err) throw err;
         
         jsonData = JSON.parse(data);
-        console.log(jsonData);
 
         terminal_arg[3].toLowerCase();
         convert(terminal_arg, jsonData, configName);
@@ -67,7 +65,32 @@ function dataToConversion(terminal_arg, config, configName) {
 
 // Converte o diretório do pdf as para o formato selecionado 
 function convert(terminal_arg, jsonData, configName) {
+    let pdfCount = terminal_arg.slice();
+    pdfCount.splice(0, 2);
+    console.log(pdfCount.length%2)
 
+
+// Mais informações sobre: 
+// https://www.w3resource.com/javascript-exercises/fundamental/javascript-fundamental-exercise-265.php
+// https://stackoverflow.com/questions/8495687/split-array-into-chunks
+
+    const perChunk = 2 // items per chunk    
+
+    const inputArray = pdfCount
+    
+    const result = inputArray.reduce((resultArray, item, index) => { 
+      const chunkIndex = Math.floor(index/perChunk)
+    
+      if(!resultArray[chunkIndex]) {
+        resultArray[chunkIndex] = [] 
+      }
+    
+      resultArray[chunkIndex].push(item)
+        
+      return resultArray
+    }, [])
+    
+    console.log(result[1]);
 //Capitalização do titulo do titulo
     function capitalizeFirstLetter(string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
@@ -98,11 +121,11 @@ function convert(terminal_arg, jsonData, configName) {
     })
 
 //Envia info da remomeação para a edição do html 
-    pdf.info(terminal_arg[2])
-    .then(pdfinfo => {
-        _page_array = pdfinfo.pages
-        edit__html(_page_array, jsonData.extension, cache_data, opts.out_dir, capitalizeFirstLetter(configName));
-    });
+    // pdf.info(terminal_arg[2])
+    // .then(pdfinfo => {
+    //     _page_array = pdfinfo.pages
+    //     edit__html(_page_array, jsonData.extension, cache_data, opts.out_dir, capitalizeFirstLetter(configName));
+    // });
     
 } 
 
