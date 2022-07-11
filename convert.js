@@ -1,6 +1,7 @@
 const pdf = require('pdf-poppler');
 const jsdom = require("jsdom");
 const fs = require('fs');
+const { config } = require('process');
 const { JSDOM } = jsdom;
 
 const htmlContent = `
@@ -19,9 +20,8 @@ const dom = new JSDOM(`${htmlContent}`);
 const document = dom.window.document;
 let pdf_name = "page";
 let c =0; let i = 1; let v = 0; l =1;
-let _page_array = 0;
 let jsonPath = './config/';
-
+let aaa = 2;
 let data = new Date()
 let month = (data.getMonth() + 1).toString().padStart(2, "0");
 let day = data.getDate().toString().padStart(2, "0");
@@ -58,8 +58,12 @@ fs.mkdir('./dist', { recursive: true }, (err) => {
 });
 
 while(v < pdf_chunkConfig.length) {
-     function folderNum(folderNum) {
-            folderNum = `./dist/dir0${l}`
+
+
+    //Envia info da remomeação para a edição do html
+
+     function folderNum(folderNum, jsonData) {
+            folderNum = `./dist/${jsonData.dir}`
 
             fs.mkdir(folderNum, { recursive: true }, (err) => {
                 if (err) throw err;
@@ -69,9 +73,9 @@ while(v < pdf_chunkConfig.length) {
         }
     //Leitura da configuração do file json
     function readConfig(terminal_arg) {
+        console.log(terminal_arg)
         fs.readdir(jsonPath, (err, data) => {
             if (err) throw err;
-            
             Object.keys(data).forEach(key => {
                 let configName = data[key].replace('.json','');
                 if (configName == terminal_arg[0]) {
@@ -82,10 +86,11 @@ while(v < pdf_chunkConfig.length) {
     };
 
     function dataToConversion(terminal_arg, config, configName) {
-
         fs.readFile(`${jsonPath}${config}`, (err, data) => {
             if (err) throw err;
             jsonData = JSON.parse(data);
+            console.log('jsonData');
+            console.log(jsonData);
 
             terminal_arg[0].toLowerCase();
             convert(terminal_arg, jsonData, configName);
@@ -95,14 +100,12 @@ while(v < pdf_chunkConfig.length) {
 
     // Converte o diretório do pdf as para o formato selecionado 
     function convert(terminal_arg, jsonData, configName) {
-
-        console.log(terminal_arg, jsonData, configName);
-
+    
 
     // Declaraçôes do path e formato da imagem
         let opts = {
             format: jsonData.extension,
-            out_dir: folderNum(folderNum),
+            out_dir: folderNum(folderNum, jsonData),
             out_prefix: "page",
             page: null,
             scale: jsonData.height
@@ -111,31 +114,28 @@ while(v < pdf_chunkConfig.length) {
         pdf.convert(terminal_arg[1], opts)
         .then(res => {
             console.log('Conversão concluida!');
-
-            edit__html(_page_array, jsonData.extension, cache_data, opts.out_dir, jsonData.title);
+            
+            pdf.info(terminal_arg[1])
+            .then(pdfinfo => {
+                edit__html(pdfinfo.pages, jsonData, cache_data, opts.out_dir);
+            });            
 
         })
         .catch(error => {
             console.error(error);
         })
-
-    //Envia info da remomeação para a edição do html 
-        pdf.info(terminal_arg[1])
-        .then(pdfinfo => {
-            _page_array = pdfinfo.pages
-        });
         
     } 
 
     //Realiza alteraçôes no html
-    function edit__html(pages, format, cache_data, standard_folder, title) {
-        document.querySelector("title").innerHTML = `Cárdapio ${title}`
+    function edit__html(pages, jsonData, cache_data, standard_folder) {
+        document.querySelector("title").innerHTML = `${jsonData.title}`
 
         if  (pages > 9) {
             for (c; c<pages; c++) {
                 let page_count = i.toString().padStart(2, "0");
         document.querySelector("body").innerHTML += (`
-        <img src="./${pdf_name}-${page_count}.${format}?t=${cache_data}" alt="" style="width: 100%; max-width: none;"><br>`);
+        <img src="./${pdf_name}-${page_count}.${jsonData.extension}?t=${cache_data}" alt="" style="width: 100%; max-width: none;"><br>`);
         i++;
             }   
         }
@@ -143,7 +143,7 @@ while(v < pdf_chunkConfig.length) {
         else if (pages <= 9) {
             for (c; c<pages; c++) {
         document.querySelector("body").innerHTML += (`
-        <img src="./${pdf_name}-${i}.${format}?t=${cache_data}" alt="" style="width: 100%; max-width: none;"><br>`);
+        <img src="./${pdf_name}-${i}.${jsonData.extension}?t=${cache_data}" alt="" style="width: 100%; max-width: none;"><br>`);
         i++;
             }        
         }

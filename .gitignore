@@ -2,3 +2,4 @@ node_modules/
 dist/
 .vscode
 pdf_samples/
+exemplar.pdf
