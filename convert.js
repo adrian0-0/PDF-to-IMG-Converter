@@ -4,24 +4,9 @@ const fs = require('fs');
 const { config } = require('process');
 const { JSDOM } = jsdom;
 
-const htmlContent = `
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
-</head>
-<body></body>
-</html>
-`
-const dom = new JSDOM(`${htmlContent}`);
-const document = dom.window.document;
+
 let pdf_name = "page";
-let c =0; let i = 1; let v = 0; l =1;
 let jsonPath = './config/';
-let aaa = 2;
 let data = new Date()
 let month = (data.getMonth() + 1).toString().padStart(2, "0");
 let day = data.getDate().toString().padStart(2, "0");
@@ -57,8 +42,22 @@ fs.mkdir('./dist', { recursive: true }, (err) => {
     if (err) throw err;
 });
 
-while(v < pdf_chunkConfig.length) {
-    let write = false;
+let count_pdf = 0
+while(count_pdf < pdf_chunkConfig.length) {
+    const htmlContent = `
+    <!DOCTYPE html>
+    <html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title></title>
+    </head>
+    <body></body>
+    </html>
+    `
+    const dom = new JSDOM(`${htmlContent}`);
+    const document = dom.window.document;
 
     //Envia info da remomeação para a edição do html
 
@@ -68,7 +67,7 @@ while(v < pdf_chunkConfig.length) {
             fs.mkdir(folderNum, { recursive: true }, (err) => {
                 if (err) throw err;
             });
-            l++;
+            
             return(folderNum)
         }
     //Leitura da configuração do file json
@@ -119,7 +118,6 @@ while(v < pdf_chunkConfig.length) {
             .then(pdfinfo => {
                 edit__html(pdfinfo.pages, jsonData, cache_data, opts.out_dir);
             });            
-
         })
         .catch(error => {
             console.error(error);
@@ -130,31 +128,61 @@ while(v < pdf_chunkConfig.length) {
     //Realiza alteraçôes no html
     function edit__html(pages, jsonData, cache_data, standard_folder) {
 
-
-        let MyPromise = new Promise(function(resolve){
-            setTimeout(function() { 
-                resolve({
-                    write: write = true,
-                }); 
-            }, 5000);
-        });
-
-        Promise.race([MyPromise])
-        .then(function(data){
+        let writePromise = new Promise(function(resolve){
             document.querySelector("title").innerHTML = `${jsonData.title}`
     
-                for (c; c < pages; c++) {
-                    document.querySelector("body").innerHTML += (`
-                    <img src="./${pdf_name}-${i}.${jsonData.extension}?t=${cache_data}" alt="" style="width: 100%; max-width: none;"><br>`);
-                    i++;
-                }
+            let count_page = 1;
 
-                if (data.write) {
-                    create__html(standard_folder)
-                }
-        }).catch(function(e){
-            console.log(e);
+    //         for (let count_edit = 0; count_edit < pages; count_edit++) {
+    //             console.log(jsonData.extension)
+    //             document.querySelector("body").innerHTML += (`
+    // <img src="./${pdf_name}-${count_page}.${jsonData.extension}?t=${cache_data}" alt="" style="width: 100%; max-width: none;"><br>`);
+    //             count_page++;
+    //         }
+            
+
+            if  (pages > 9) {
+
+                for (let count_edit = 0; count_edit < pages; count_edit++) {
+                    let page_format = count_page.toString().padStart(2, "0");
+                    console.log(jsonData.extension)
+                    document.querySelector("body").innerHTML += (`
+    <img src="./${pdf_name}-${page_format}.${jsonData.extension}?t=${cache_data}" alt="" style="width: 100%; max-width: none;"><br>`);
+                    count_page++;
+                } 
+            }
+        
+            else if (pages <= 9) {
+                for (let count_edit = 0; count_edit < pages; count_edit++) {
+                    console.log(jsonData.extension)
+                    document.querySelector("body").innerHTML += (`
+    <img src="./${pdf_name}-${count_page}.${jsonData.extension}?t=${cache_data}" alt="" style="width: 100%; max-width: none;"><br>`);
+                    count_page++;
+                }      
+            }
+            
+            create__html(standard_folder);
+            
+            resolve();                    
         });
+
+
+    //     Promise.race([writePromise])
+    //     .then(function(data){
+    //         document.querySelector("title").innerHTML = `${jsonData.title}`
+    
+    //             for (c; c < pages; c++) {
+    //                 document.querySelector("body").innerHTML += (`
+    // <img src="./${pdf_name}-${i}.${jsonData.extension}?t=${cache_data}" alt="" style="width: 100%; max-width: none;"><br>`);
+    //                 i++;
+    //             }
+
+    //             if (data.write) {
+    //                 create__html(standard_folder)
+    //             }
+    //     }).catch(function(e){
+    //         console.log(e);
+    //     });
 
 
 
@@ -185,6 +213,6 @@ while(v < pdf_chunkConfig.length) {
         });
     }
 
-    readConfig(pdf_chunkConfig[v]);
-    v++;
+    readConfig(pdf_chunkConfig[count_pdf]);
+    count_pdf++;
 }
