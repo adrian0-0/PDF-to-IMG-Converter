@@ -5,12 +5,12 @@
 <a href="https://github.com/kb47/pdf-poppler#readme">pdf-poppler</a>
 
 <h3>Modo de uso:</h3>
-<code>node convert.js ./sample.pdf cabana_vip</code>
+<code>node convert.js cabana_vip ./sample.pdf</code>
 <ul>
     <li>node argument: ./filename</li>
     <li>node argument: pdf-config(cabana_vip, cabana_imperatriz, emporio)</li>
 </ul>
-</h3>Conversão de mutiplos PDFs<h3>
+<h3>Conversão de mutiplos PDFs</h3>
 <code>node convert.js cabana_vip ./sample.pdf cabana_imperatriz ./sample.pdf</code>
 
 <h3>Adição de novas configurações PDF-JSON</h3>
