@@ -58,7 +58,7 @@ fs.mkdir('./dist', { recursive: true }, (err) => {
 });
 
 while(v < pdf_chunkConfig.length) {
-
+    let write = false;
 
     //Envia info da remomeação para a edição do html
 
@@ -129,34 +129,35 @@ while(v < pdf_chunkConfig.length) {
 
     //Realiza alteraçôes no html
     function edit__html(pages, jsonData, cache_data, standard_folder) {
-        document.querySelector("title").innerHTML = `${jsonData.title}`
 
-        function testPromise(result, err) {
 
-            return  new Promise ((resolve, reject) => {
-        
-                if (pages <= 9) { resolve({
-                    name: "OLAAAA"
-        
-                    }) 
-                }
-                else if (pages >9 ) { reject({
-                    name: "Falso"
-                })}
-            })
-        }
-        
-        testPromise()
-            .then((res) => {
-                for (i = 0; i < 5; i++) {
+        let MyPromise = new Promise(function(resolve){
+            setTimeout(function() { 
+                resolve({
+                    write: write = true,
+                }); 
+            }, 5000);
+        });
+
+        Promise.race([MyPromise])
+        .then(function(data){
+            document.querySelector("title").innerHTML = `${jsonData.title}`
+    
+                for (c; c < pages; c++) {
                     document.querySelector("body").innerHTML += (`
-                    <img src="./${pdf_name}-${page_count}.${jsonData.extension}?t=${cache_data}" alt="" style="width: 100%; max-width: none;"><br>`);
-                    console.log(res.name)
+                    <img src="./${pdf_name}-${i}.${jsonData.extension}?t=${cache_data}" alt="" style="width: 100%; max-width: none;"><br>`);
+                    i++;
                 }
-                create__html(standard_folder);                 
-            }).catch ((err) => {
-                console.log(err.name)
-            })
+
+                if (data.write) {
+                    create__html(standard_folder)
+                }
+        }).catch(function(e){
+            console.log(e);
+        });
+
+
+
         // if  (pages > 9) {
         //     for (c; c<pages; c++) {
         //         let page_count = i.toString().padStart(2, "0");
