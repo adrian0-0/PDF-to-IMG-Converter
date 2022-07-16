@@ -8,11 +8,11 @@
 <code>node convert.js cabana_vip ./sample.pdf</code>
 <ul>
     <li>node argument: ./filename</li>
-    <li>node argument: pdf-config(cabana_vip, cabana_imperatriz, emporio)</li>
+    <li>node argument: config(cabana_vip, cabana_imperatriz, emporio)</li>
 </ul>
 <h3>Conversão de mutiplos PDFs</h3>
 <code>node convert.js cabana_vip ./sample.pdf cabana_imperatriz ./sample.pdf</code>
 
 <h3>Adição de novas configurações PDF-JSON</h3>
-<p>Caso adicione uma nova configuração introduza no diretório ./pdf_config</p>
+<p>Caso adicione uma nova configuração introduza no diretório ./config</p>
 <p>O node argument que irá para executar a nova config, será de acordo com o nome do arquivo JSON</p>
