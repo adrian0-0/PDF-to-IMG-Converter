@@ -9,19 +9,19 @@ let month = (data.getMonth() + 1).toString().padStart(2, "0");
 let day = data.getDate().toString().padStart(2, "0");
 let cache_data = day+month;
 
-// Recebe os args inputados no terminal (path do diretório / formato da imagem)
+// Receive input args from the terminal (pdf config / dir path)
 let _terminal_arg = process.argv;
 _terminal_arg.forEach(function terminal_arg (input, index) {
 });
 
-// Remove elementos não utilizados pelo array [connfig, path]
+// Remove elements that aren't used by the array [config, path] 
 let pdfCount = _terminal_arg.slice();
 pdfCount.splice(0, 2);
-const perChunk = 2; // args recebidos por chunk    
+const perChunk = 2; // get arrays per chunk    
 
 const inputArray = pdfCount;
 
-// Formata os args recebidos em um array de arrays
+// Format incoming args into an array of arrays
 const pdf_chunkConfig = inputArray.reduce((resultArray, item, index) => { 
   const chunkIndex = Math.floor(index/perChunk)
 
@@ -34,13 +34,13 @@ const pdf_chunkConfig = inputArray.reduce((resultArray, item, index) => {
   return resultArray;
 }, [])
 
-//Cria o diretório padrão onde serâo armazenados as conversões de img e html
+// Create a standard dir where the incoming conversions will be stored as img(jpg or png)
 fs.mkdir('./dist', { recursive: true }, (err) => {
     if (err) throw err;
 });
 
 
-// Loop de execução para cada uma das conversões
+// Run a loop of conversions for each pdf especified
 let count_pdf = 0
 while(count_pdf < pdf_chunkConfig.length) {
     const htmlContent = `
@@ -58,7 +58,7 @@ while(count_pdf < pdf_chunkConfig.length) {
     const dom = new JSDOM(`${htmlContent}`);
     const document = dom.window.document;
 
-    //Retorna para a f convert a especificaçâo do nome do diretório a ser armazenado os arquivos de uma config e faz a criação do diretório
+    // Return for f convert the propertys that will be used as data to create specific dir names like dist/cabana_vip or dist/emporio
      function folderNum(folderNum, jsonData) {
             folderNum = `./dist/${jsonData.dir}`
 
@@ -68,7 +68,7 @@ while(count_pdf < pdf_chunkConfig.length) {
             
             return(folderNum)
         }
-    //Leitura da config do file json
+    //Reads the config json file
     function readConfig(terminal_arg) {
         let jsonPath = './config/';
 
@@ -83,7 +83,7 @@ while(count_pdf < pdf_chunkConfig.length) {
         });
     };
 
-    //Converte os dados recebidos do json
+    //Convert the data received by the json
     function dataToConversion(terminal_arg, config, jsonPath) {
         fs.readFile(`${jsonPath}${config}`, (err, data) => {
             if (err) throw err;
@@ -98,7 +98,7 @@ while(count_pdf < pdf_chunkConfig.length) {
 
     function convert(terminal_arg, jsonData) {    
 
-    // Especificaçâo do path, dir, extension e height para a biblioteca
+    // Give to the library json propertys like {title, dir, extension}
         let opts = {
             format: jsonData.extension,
             out_dir: folderNum(folderNum, jsonData),
@@ -107,7 +107,7 @@ while(count_pdf < pdf_chunkConfig.length) {
             scale: jsonData.height
         };
     
-    // Conversão do pdf em imagens
+    // Does the Conversion of pdf file to images
         pdf.convert(terminal_arg[1], opts)
         .then(res => {
             console.log(`Conversão concluida!: ${terminal_arg[0]}`);
@@ -123,7 +123,7 @@ while(count_pdf < pdf_chunkConfig.length) {
         
     } 
 
-    //Realiza edições no html como a title
+    //Perform some editions on html file
     function edit__html(pages, jsonData, cache_data, standard_folder) {
         let pdf_name = "page";
 
@@ -131,7 +131,7 @@ while(count_pdf < pdf_chunkConfig.length) {
             document.querySelector("title").innerHTML = `${jsonData.title}`
     
             let count_page = 1;
-            // Numera as paginas convertidas no html e realiza outras alterações seguindo o pdf convertido
+            // Enumerate the pages converted on the html
             if  (pages > 9) {
 
                 for (let count_edit = 0; count_edit < pages; count_edit++) {
@@ -157,7 +157,7 @@ while(count_pdf < pdf_chunkConfig.length) {
     }
 
 
-    //Cria o arquivo html com as alterações já recebidas
+    //Create an html file with the editions 
     function create__html(standard_folder) {
         fs.writeFile(`${standard_folder}/index.html`, document.documentElement.innerHTML, function(error) {
             if (error) throw error;

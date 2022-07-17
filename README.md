@@ -1,18 +1,18 @@
-<h1>Conversor PDF para IMG com suporte a fontes personalizadas</h1>
+<h1>PDF to IMG Converter with custom font support</h1>
 
-<h2>Bibliotecas usadas:</h2>
+<h2>Librarys used:</h2>
 <a href="https://github.com/jsdom/jsdom#readme">jsdom</a>
 <a href="https://github.com/kb47/pdf-poppler#readme">pdf-poppler</a>
 
-<h3>Modo de uso:</h3>
-<code>node convert.js cabana_vip ./sample.pdf</code>
+<h3>How to use:</h3>
+<code>node convert.js sample ./sample.pdf</code>
 <ul>
+    <li>node argument: config(sample, cabana_vip, cabana_imperatriz, emporio)</li>
     <li>node argument: ./filename</li>
-    <li>node argument: config(cabana_vip, cabana_imperatriz, emporio)</li>
 </ul>
-<h3>Conversão de mutiplos PDFs</h3>
+<h3>Converting mutiple PDF files</h3>
 <code>node convert.js cabana_vip ./sample.pdf cabana_imperatriz ./sample.pdf</code>
 
-<h3>Adição de novas configurações PDF-JSON</h3>
-<p>Caso adicione uma nova configuração introduza no diretório ./config</p>
-<p>O node argument que irá para executar a nova config, será de acordo com o nome do arquivo JSON</p>
+<h3>Adition of new configurations of PDF-JSON</h3>
+<p>When you put a new configuration please input on the ./config directory as a json file</p>
+<p>The node argument which will run the new config, it will be accorded with the JSON file name</p>
