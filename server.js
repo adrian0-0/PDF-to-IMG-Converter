@@ -1,8 +1,8 @@
-const app = require ('express')();
-
-
+// const app = require ('express')();
+import express from 'express'
+const app = express();
 app.get('/', (req, res) => 
-    res.send("AHHHHHHH")
+    res.send("AHHHaads")
 );
 
 const port = process.env.PORT || 3333;

@@ -6,5 +6,6 @@
   },
   "script": {
     "start": "node server.js"
-  }
+  },
+  "type": "module"
 }
