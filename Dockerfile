@@ -1,9 +1,11 @@
 FROM node:16-alpine
 WORKDIR /app
 
+RUN apk add bash
+
 COPY package*.json ./
 
-RUN npm install
+RUN yarn
 
 COPY . .
 
@@ -11,4 +13,4 @@ COPY . .
 
 # EXPOSE 8080
 
-CMD [ "npm", "start" ]
+CMD [ "yarn", "start" ]
