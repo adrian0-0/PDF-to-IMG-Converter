@@ -2,7 +2,7 @@ version: '3'
 
 services: 
   server:
-    container_name: 'node'
+    container_name: 'pdf-ubuntu20.04'
     build: .
     ports: 
       - 3333:3333

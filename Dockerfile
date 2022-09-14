@@ -1,7 +1,12 @@
-FROM node:16-alpine
+FROM ubuntu:20.04
+
 WORKDIR /app
 
-RUN apk add bash
+RUN apt-get update \
+    && apt-get upgrade \
+    && apt-get install apt-utils \
+    && apt-get install npm -y \
+    && apt-get install nodejs -y
 
 COPY package*.json ./
 
