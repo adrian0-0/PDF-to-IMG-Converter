@@ -1,12 +1,16 @@
-FROM ubuntu:20.04
+FROM debian:11-slim
 
 WORKDIR /app
 
-RUN apt-get update \
-    && apt-get upgrade \
-    && apt-get install apt-utils \
-    && apt-get install npm -y \
-    && apt-get install nodejs -y
+RUN apt-get update
+RUN apt-get install -yq --no-install-recommends
+RUN apt-get install curl -y
+RUN apt-get install bash
+RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash -
+RUN apt-get install -y nodejs
+RUN apt-get install -y poppler-utils
+RUN npm install --global yarn
+
 
 COPY package*.json ./
 
