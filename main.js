@@ -1,11 +1,8 @@
-const jsdom = require("jsdom");
-const fs = require('fs');
-const { config } = require('process');
+import jsdom from "jsdom";
+import { mkdir, readdir, readFile, writeFile } from 'fs';
+import { exec } from 'child_process';
+
 const { JSDOM } = jsdom;
-const { exec } = require('child_process');
-const child_process = require("child_process");
-
-
 let data = new Date()
 let month = (data.getMonth() + 1).toString().padStart(2, "0");
 let day = data.getDate().toString().padStart(2, "0");
@@ -34,7 +31,7 @@ const pdf_chunkConfig = inputArray.reduce((resultArray, item, index) => {
 }, [])
 
 //Cria o diretório padrão onde serâo armazenados as conversões de img e html
-fs.mkdir('./dist', { recursive: true }, (err) => {
+mkdir('./dist', { recursive: true }, (err) => {
     if (err) throw err;
 });
 
@@ -61,7 +58,7 @@ while(count_pdf < pdf_chunkConfig.length) {
         function folderNum(folderNum, jsonData) {
             folderNum = `./dist/${jsonData.dir}`
             
-            fs.mkdir(folderNum, { recursive: true }, (err) => {
+            mkdir(folderNum, { recursive: true }, (err) => {
                 if (err) throw err;
             });
             
@@ -71,7 +68,7 @@ while(count_pdf < pdf_chunkConfig.length) {
     function readConfig(terminal_arg) {
         let jsonPath = './config/';
         
-        fs.readdir(jsonPath, (err, data) => {
+        readdir(jsonPath, (err, data) => {
             if (err) throw err;
             Object.keys(data).forEach(key => {
                 let configName = data[key].replace('.json','');
@@ -84,7 +81,7 @@ while(count_pdf < pdf_chunkConfig.length) {
     
     //Converte os dados recebidos do json
     function dataToConversion(terminal_arg, config, jsonPath) {
-        fs.readFile(`${jsonPath}${config}`, (err, data) => {
+        readFile(`${jsonPath}${config}`, (err, data) => {
             if (err) throw err;
             let jsonData = JSON.parse(data);
         
@@ -97,13 +94,11 @@ while(count_pdf < pdf_chunkConfig.length) {
     
     function convert(terminal_arg, jsonData) {   
         const dist =  folderNum(folderNum, jsonData)
-        console.log(dist)
 
         let output = `pdftoppm ${terminal_arg[1]} -f 1000000 2>&1 | grep -o '([0-9]*)\.$' \| grep -o '[0-9]*'` + 
         ` && cd ${dist} ` +
         ` && pdftoppm -${jsonData.extension} -rx ${jsonData.dpi_x} -ry ${jsonData.dpi_y} ../../${terminal_arg[1]} page`; 
         
-        let exec = require("child_process").exec;
         exec(output, function(err, stdout){
             if (err) console.log(err);
             edit__html(stdout, jsonData, cache_data, dist);    
@@ -146,7 +141,7 @@ while(count_pdf < pdf_chunkConfig.length) {
 
     //Cria o arquivo html com as alterações já recebidas
     function create__html(standard_folder) {
-        fs.writeFile(`${standard_folder}/index.html`, document.documentElement.innerHTML, function(error) {
+        writeFile(`${standard_folder}/index.html`, document.documentElement.innerHTML, function(error) {
             if (error) throw error;
         });
     }
