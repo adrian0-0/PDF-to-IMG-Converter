@@ -12,6 +12,8 @@ RUN apt-get install -y poppler-utils
 RUN npm install --global yarn
 RUN yarn add nodemon -D
 
+WORKDIR ./www
+
 
 COPY package*.json ./
 
@@ -23,4 +25,4 @@ COPY . .
 
 # EXPOSE 8080
 
-CMD [ "yarn", "start" ]
+CMD [ "yarn", "dev" ]
