@@ -10,6 +10,7 @@ RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash -
 RUN apt-get install -y nodejs
 RUN apt-get install -y poppler-utils
 RUN npm install --global yarn
+RUN yarn add nodemon -D
 
 
 COPY package*.json ./

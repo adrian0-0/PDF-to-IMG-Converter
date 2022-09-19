@@ -5,7 +5,7 @@
     "pdf-poppler": "^0.2.1"
   },
   "script": {
-    "start": "node server.js"
+    "start": "nodemon server.js"
   },
   "type": "module"
 }
