@@ -3,6 +3,7 @@ import { mkdir, readdir, readFile, writeFile } from 'fs';
 const { JSDOM } = jsdom;
 import { exec } from 'child_process';
 
+
 let data = new Date()
 let month = (data.getMonth() + 1).toString().padStart(2, "0");
 let day = data.getDate().toString().padStart(2, "0");

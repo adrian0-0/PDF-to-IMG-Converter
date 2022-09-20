@@ -1,14 +1,15 @@
 import { useState } from 'react'
-import  "./styl/App.styl";
+import  "./styl/app.styl";
+import Footer from './Footer'
+import Header from './Header'
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <div className="app">
-      <header>
-        <div className='header'></div>
-      </header>
+      <Header></Header>
+      
       <main>
         <div className='main'>
           <h1>Conversor PDF-IMG</h1>
@@ -34,6 +35,10 @@ function App() {
           </div>
         </div>
       </main>
+      <footer>
+        <div className='footer'></div>
+        <Footer></Footer>
+      </footer>
 
     </div>
   )
