@@ -1,9 +1,12 @@
+import "./styl/footer.styl"
 function footer() {
 
   return (
-    <div className="footer">
-        
-    </div>
+    <footer>
+      <div className="footer">
+          footer
+      </div>
+    </footer>
   )
 }
 

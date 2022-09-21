@@ -120,7 +120,7 @@ while(count_pdf < pdf_chunkConfig.length) {
                 for (let count_edit = 0; count_edit < pages; count_edit++) {
                     let page_format = count_page.toString().padStart(2, "0");
                     document.querySelector("body").innerHTML += (`
-    <img src="./${pdf_name}-${page_format}.${jsonData.extension}?t=${cache_data}" alt="" style="width: 100%; max-width: none;"><br>`);
+    <img src="./${pdf_name}-${page_format}.${jsonData.extension}?t=${cache_data}" loading="lazy"  alt="" style="width: 100%; max-width: none;"><br>`);
                     count_page++;
                 } 
             }
@@ -128,7 +128,7 @@ while(count_pdf < pdf_chunkConfig.length) {
             else if (pages <= 9) {
                 for (let count_edit = 0; count_edit < pages; count_edit++) {
                     document.querySelector("body").innerHTML += (`
-    <img src="./${pdf_name}-${count_page}.${jsonData.extension}?t=${cache_data}" alt="" style="width: 100%; max-width: none;"><br>`);
+    <img src="./${pdf_name}-${count_page}.${jsonData.extension}?t=${cache_data}"  loading="lazy" alt="" style="width: 100%; max-width: none;"><br>`);
                     count_page++;
                 }      
             }

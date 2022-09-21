@@ -14,23 +14,81 @@ body
 a
     text-decoration none
 
-.header
-    height 120px
+button
+    width 200px
+    height 50px
+    border-radius 20px
+    border-style none
+    cursor pointer
+
+
+input
+    width 250px
+    height 50px
+    border-radius 20px
+    border-style solid
+    cursor pointer
+
+
+input[type=number] 
+    -moz-appearance textfield
+    margin 0
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button
+    -webkit-appearance none
+
+
+select
+    width 250px
+    height 50px
+    border-radius 20px
+    border-style solid
+    cursor pointer
+
+
 .app
     width 100vw
-
+    
 .main
     width 50%
     display block
     margin auto
 
 
-.app__convert-opts
-    width 50%
-    display flex
+.main__convert-opts
+    width 40%
+    display inline-flex
     flex-direction column
     justify-content flex-start
 
-.app__pdf
+    .convert-opts--textDPI
+        margin-top 50px
+        margin-bottom 20px
+
+    label[for=extensão]
+        margin-top 50px
+        margin-bottom 20px
+
+.main__pdf
     display flex
-    justify-content flex-end
+    justify-content center  
+    float right
+    width 59%
+    height 450px
+    border-style dashed
+
+    &::after
+        content ""
+        width 150px
+        height 150px
+        position absolute
+        background url("../assets/pdf.png") no-repeat
+        background-size contain
+        right 22%
+        top 30%
+
+    .main__pdf--submit
+        display flex
+        align-self flex-end
+        margin-bottom  30px
