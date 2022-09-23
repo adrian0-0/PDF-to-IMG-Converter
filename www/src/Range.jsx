@@ -1,12 +1,23 @@
-import Form from "react-bootstrap/Form";
+import React, { useState } from "react";
+import RangeSlider from "react-bootstrap-range-slider";
+import "bootstrap/dist/css/bootstrap.css";
+import "react-bootstrap-range-slider/dist/react-bootstrap-range-slider.css";
+import "./styl/range.styl";
 
-function RangeExample() {
+const Range = () => {
+  const [value, setValue] = React.useState(300);
+
   return (
-    <>
-      <Form.Label>Range</Form.Label>
-      <Form.Range />
-    </>
+    <div className="range">
+      <p>DPI Recomendado: 300</p>
+      <RangeSlider
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        min={200}
+        max={500}
+      />
+    </div>
   );
-}
+};
 
-export default RangeExample;
+export default Range;
