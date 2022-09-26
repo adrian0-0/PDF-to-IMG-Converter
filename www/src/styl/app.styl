@@ -9,9 +9,7 @@ h1
 body
     font-family  "'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif"
     font-weight 400
-    background-color #000000
-
-
+    background linear-gradient(320deg,rgba(118,38,121,1),rgba(74,29,29,1),rgba(83,14,44,1), rgba(15,21,54,1))
 
 a
     text-decoration none
@@ -66,46 +64,42 @@ select
 .app__block
     width 100vw
 
-
-.app__background
-    display flex
-    width 70vw
-    justify-content space-around
+    // background rgb(118,38,121)
+    // background linear-gradient(90deg, rgba(118,38,121,1) 0%, rgba(74,29,29,1) 37%, rgba(83,14,44,1) 63%, rgba(15,21,54,1) 100%) 
+    // background-color #000000
+    // background: linear-gradient(320deg,rgba(118,38,121,1),rgba(74,29,29,1),rgba(83,14,44,1), rgba(15,21,54,1))
 
     
+
+.app__block--child
+    // opacity: 0.6
+
+
+
+.app__background
+    width 70vw
+    height 70vh
+    margin auto
     // background url("../assets/main-background.jpg")
-    background: rgba( 255, 255, 255, 0.55 );
-
-    box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
-    backdrop-filter: blur( 9.5px );
-
-    border-radius: 10px;
-    border: 1px solid rgba( 255, 255, 255, 0.18 );
-
-
-    // background url('http://trungk18.github.io/img/trungk18.png') no-repeat, -moz-linear-gradient(135deg, #6ec575 0, #3b8686 100%)
-    // background url('http://trungk18.github.io/img/trungk18.png') no-repeat, -webkit-gradient(135deg, #6ec575 0, #3b8686 100%)
-    // background url('http://trungk18.github.io/img/trungk18.png') no-repeat, -webkit-linear-gradient(135deg, #6ec575 0, #3b8686 100%)
-    // background url('http://trungk18.github.io/img/trungk18.png') no-repeat, -o-linear-gradient(135deg, #6ec575 0, #3b8686 100%)
-    // background url('http://trungk18.github.io/img/trungk18.png') no-repeat, -ms-linear-gradient(135deg, #6ec575 0, #3b8686 100%)
-    // background url('http://trungk18.github.io/img/trungk18.png') no-repeat, linear-gradient(135deg, #6ec575 0, #3b8686 100%)
-
-
-.main
-    // width 50%
-    // display block
-    // margin auto
+    background: rgba( 255, 255, 255, 0.55 )
+    box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 )
+    backdrop-filter: blur( 9.5px )
+    border-radius: 10px
+    border: 1px solid rgba( 255, 255, 255, 0.18 )
 
 
 .main__convert-opts
-    width 40%
     display inline-flex
     flex-direction column
-    justify-content flex-start
+    align-items center
+    justify-content center
+    width 40%
+    height 84%
+    padding 10px
 
     .convert-opts--textDPI
-        margin-top 50px
-        margin-bottom 20px
+        margin-top 25px
+        margin-bottom 25px
 
     label[for=extensão]
         margin-top 50px
@@ -115,8 +109,9 @@ select
     display flex
     justify-content center  
     float right
-    width 59%
-    height 450px
+    width 58%
+    height 602px
+    margin 10px 10px
     border-style dashed
 
     &::after
