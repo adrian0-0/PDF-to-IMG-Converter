@@ -64,23 +64,10 @@ select
 .app__block
     width 100vw
 
-    // background rgb(118,38,121)
-    // background linear-gradient(90deg, rgba(118,38,121,1) 0%, rgba(74,29,29,1) 37%, rgba(83,14,44,1) 63%, rgba(15,21,54,1) 100%) 
-    // background-color #000000
-    // background: linear-gradient(320deg,rgba(118,38,121,1),rgba(74,29,29,1),rgba(83,14,44,1), rgba(15,21,54,1))
-
-    
-
-.app__block--child
-    // opacity: 0.6
-
-
-
 .app__background
     width 70vw
     height 70vh
     margin auto
-    // background url("../assets/main-background.jpg")
     background: rgba( 255, 255, 255, 0.55 )
     box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 )
     backdrop-filter: blur( 9.5px )
@@ -107,24 +94,38 @@ select
 
 .main__pdf
     display flex
-    justify-content center  
+    justify-content center
+    align-items center  
     float right
-    width 58%
+    width 55%
     height 602px
-    margin 10px 10px
+    margin 16px 10px
     border-style dashed
 
     &::after
         content ""
+        display flex
+        align-content center
+        justify-content center
         width 150px
         height 150px
         position absolute
         background url("../assets/pdf.png") no-repeat
         background-size contain
-        right 22%
-        top 30%
+        
 
     .main__pdf--submit
         display flex
         align-self flex-end
         margin-bottom  30px
+
+// @import "./media.styl"
+
+// @media $desktop-medium
+//     .main__pdf
+//         width 100px
+@import "./media.styl"
+@media $desktop-medium
+
+    .main__convert-opts h2
+        text-align center
