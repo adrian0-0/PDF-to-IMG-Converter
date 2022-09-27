@@ -20,20 +20,20 @@ button
     border-radius 40px
     border-style none
     cursor pointer
-    background-color red
-    border-color red
+    background-color rgb(128, 20, 20)
+    border-color  rgb(128, 20, 20)
     
     &.btn 
-        color red
-        border-color red
+        color  rgb(128, 20, 20)
+        border-color  rgb(128, 20, 20)
         
-        &.btn-outline-primary
+        &.btn-outline
             width 300px
 
             &:hover
-                background-color red
-                border-color red
-
+                background-color  rgb(128, 20, 20)
+                border-color  rgb(128, 20, 20)
+                color white
 input
     width 250px
     height 50px
@@ -74,6 +74,9 @@ select
     border-radius: 10px
     border: 1px solid rgba( 255, 255, 255, 0.18 )
 
+    h1
+        padding 20px
+
 
 .main__convert-opts
     display inline-flex
@@ -98,7 +101,7 @@ select
     align-items center  
     float right
     width 55%
-    height 602px
+    height 80%
     margin 16px 10px
     border-style dashed
 
@@ -119,13 +122,30 @@ select
         align-self flex-end
         margin-bottom  30px
 
-// @import "./media.styl"
-
-// @media $desktop-medium
-//     .main__pdf
-//         width 100px
 @import "./media.styl"
 @media $desktop-medium
 
     .main__convert-opts h2
         text-align center
+
+@media $tablet-medium
+    .app__background
+        height auto
+
+        .main__pdf
+            width auto
+            float none
+            height 500px
+
+        .main__convert-opts 
+            width 100%
+            margin-top 20px
+            margin-bottom 20px
+
+@media $mobile-medium
+
+    .main__pdf
+        background transparent
+
+    button.btn.btn-outline
+        width 200px

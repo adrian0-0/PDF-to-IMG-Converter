@@ -13,6 +13,7 @@ const Range = () => {
       <RangeSlider
         value={value}
         onChange={(e) => setValue(e.target.value)}
+        step={50}
         min={200}
         max={500}
       />

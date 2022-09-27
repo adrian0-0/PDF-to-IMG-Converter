@@ -38,11 +38,7 @@ function App() {
                 </div>
                 <div className="main__pdf">
                   <div className="main__pdf--submit">
-                    <Button
-                      variant="outline-primary"
-                      type="submit"
-                      className="button"
-                    >
+                    <Button variant="outline" type="submit" className="button">
                       Selecionar Arquivo PDF
                     </Button>
                   </div>
