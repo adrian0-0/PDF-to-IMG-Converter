@@ -1,4 +1,0 @@
-git compose-up
-docker images
-docker rmi  d89fe50e0fac -f
-npm install express
