@@ -1,6 +1,6 @@
 # PDF to IMG Converter
 
-O PDF to IMG Converter têm por objetivo realizar conversões de PDFs para imagem seguindo uma formatação em seu HTML que pode variar de acordo com os presets específicados, além disso sua utilização será interna as pessoas cadastradas com o email da maximize.
+O PDF to IMG Converter têm por objetivo realizar conversões de PDFs para imagem seguindo uma formatação em seu HTML que pode variar de acordo com os presets específicados, além disso sua utilização será interna as pessoas cadastradas com o email da organização.
 
 ## Dependências
 
