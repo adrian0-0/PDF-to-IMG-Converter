@@ -23,7 +23,7 @@ class URLtoPDF {
 
   async requestPDF_from_webserver() {
     let output =
-      `cd www/src/server/api_output` +
+      `cd www/src/server/api/api_output` +
       ` && wget ${this.__data.pdf_url} -O ${this.__ticketNum}.pdf`;
 
     const exec_file_from_webserver = util.promisify(exec);

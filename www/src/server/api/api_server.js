@@ -1,12 +1,15 @@
-import express from "express";
+import express, { response } from "express";
 import { readFile, writeFile, readdirSync } from "fs";
-import { message } from "../script/message.js";
-import { RequestData } from "../script/RequestData.js";
+import { message } from "../../script/message.js";
+import { RequestData } from "../../script/RequestData.js";
+import { OAuth2Client } from "google-auth-library";
+import { readFileSync } from "fs";
 import bodyParser from "body-parser";
 import admzip from "adm-zip";
 import path from "path";
 import { fileURLToPath } from "url";
 import util from "util";
+import cors from "cors";
 
 const port = 5000;
 const app = express();
@@ -23,6 +26,7 @@ app.use(urlencodedParser);
 app.use(jsonParser);
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(cors({ origin: "*" }));
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -30,11 +34,35 @@ const __dirname = path.dirname(__filename);
 const date = new Date();
 const zip_num = date.getTime();
 const file_after_download = `${zip_num}downloaded_file.zip`;
-const zip_path = `./www/src/server/api_output/dist/${file_after_download}`;
+const zip_path = `./www/src/server/api/api_output/dist/${file_after_download}`;
 
 app.get("/api", (req, res) => {
   res.send(message());
   console.log(message());
+});
+
+app.get("/oauth", (req, res) => {
+  res.send(message());
+  console.log(message());
+});
+
+app.post("/oauth", urlencodedParser, (req, res) => {
+  const data = JSON.parse(JSON.stringify(req.body.user));
+  const client = new OAuth2Client(data.CLIENT_ID);
+  async function verify() {
+    const ticket = await client.verifyIdToken({
+      idToken: data.JWT,
+      audience: data.CLIENT_ID, // Specify the CLIENT_ID of the app that accesses the backend
+      // Or, if multiple clients access the backend:
+      //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
+    });
+    const payload = ticket.getPayload();
+    const userid = payload["sub"];
+    // If request specified a G Suite domain:
+    const domain = payload["hd"];
+  }
+  console.log(client);
+  verify().catch(console.error);
 });
 
 // o metódo post foi criado para solucionar o ERRO 404 devido a sua não declaração quando chamado pelo axios

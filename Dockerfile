@@ -16,4 +16,4 @@ ENV PORT=8080
 
 EXPOSE 8080
 
-CMD ["sh", "-c", "yarn install && yarn dev"]
+CMD ["sh", "-c", "yarn dev"]

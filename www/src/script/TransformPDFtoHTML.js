@@ -1,8 +1,8 @@
 import jsdom from "jsdom";
 import { writeFile } from "fs";
 import util from "util";
-import { download } from "../server/server.js";
-import { htmlContent } from "./template/htmlContent.js";
+import { download } from "../server/api/api_server.js";
+import { htmlContent } from "./htmlContent.js";
 
 class TransformPDFtoHTML {
   constructor(data, data_time, cacheData, ticketNum) {
@@ -55,7 +55,7 @@ class TransformPDFtoHTML {
   async createHTML(document) {
     const writeBase64file = util.promisify(writeFile);
     await writeBase64file(
-      `www/src/server/api_output/dist/index.html`,
+      `www/src/server/api/api_output/dist/index.html`,
       document.documentElement.innerHTML,
       function (error) {
         if (error) throw error;

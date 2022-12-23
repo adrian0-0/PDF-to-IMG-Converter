@@ -16,7 +16,7 @@ class Base64toPDF {
     let base64encoded = base64Data.replace("data:application/pdf;base64,", "");
     const writeBase64file = util.promisify(writeFile);
     await writeBase64file(
-      `./www/src/server/api_input/${this.__ticketNum}.b64`,
+      `./www/src/server/api/api_input/${this.__ticketNum}.b64`,
       base64encoded,
       async function (error) {
         if (error) throw error;
@@ -26,7 +26,7 @@ class Base64toPDF {
   }
   async base64toPDF() {
     let output =
-      `cd www/src/server` +
+      `cd www/src/server/api` +
       ` && base64 --decode --ignore-garbage ./api_input/${this.__ticketNum}.b64 > ./api_output/${this.__ticketNum}.pdf`;
 
     const exec_base64topdf = util.promisify(exec);

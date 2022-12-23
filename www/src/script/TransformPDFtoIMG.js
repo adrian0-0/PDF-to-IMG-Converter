@@ -19,7 +19,7 @@ class TransformPDFtoIMG extends TransformPDFtoHTML {
   async convert() {
     const dist = "dist";
     let output =
-      `cd www/src/server/api_output` +
+      `cd www/src/server/api/api_output` +
       ` && pdftoppm ./${this.__ticketNum}.pdf -f 1000000 2>&1 | grep -o '([0-9]*)\.$' \| grep -o '[0-9]*'` +
       ` && cd ./${dist} ` +
       ` && pdftoppm -${this.__data.select_extension} -rx ${this.__data.rangeValue} -ry ${this.__data.rangeValue} -scale-to-x ${this.__data.select_dimension[0]} -scale-to-y ${this.__data.select_dimension[1]} ../${this.__ticketNum}.pdf page`;
