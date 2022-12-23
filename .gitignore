@@ -1,5 +1,8 @@
-node_modules/
-dist/
 .vscode
-pdf_samples/
-exemplar.pdf
+node_modules
+/dist
+put_pdf_here/2021.pdf
+put_pdf_here/2022.pdf
+yarn-error.log
+**/.DS_Store
+.DS_Store

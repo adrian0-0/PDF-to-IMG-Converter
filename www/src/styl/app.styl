@@ -1,0 +1,221 @@
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td 
+    margin 0
+    padding 0
+    margin-bottom 0 
+
+
+a
+    text-decoration none
+
+.button, .input
+    background transparent
+    border 1px solid
+    padding 11px 0px
+    text-align center
+    border-radius 40px
+    cursor pointer
+    border-color  rgb(128, 20, 20)
+    color  rgb(128, 20, 20)
+    margin-bottom 0px;
+
+    &:hover
+        background-color  rgb(128, 20, 20)
+        border-color  rgb(128, 20, 20)
+        color white
+
+ 
+    &.btn
+        color  rgb(128, 20, 20)
+        border-color  rgb(128, 20, 20)
+        
+        &.btn-outline, .button__SendDataToAPI, label[for=select-pdf]
+            width 300px
+
+            &:hover
+                background-color  rgb(128, 20, 20)
+                border-color  rgb(128, 20, 20)
+                color white
+
+input
+    border-radius 20px
+    border-style solid
+    cursor pointer
+
+
+input[type=number] 
+    -moz-appearance textfield
+    margin 0
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button
+    -webkit-appearance none
+
+
+select
+    width 250px
+    height 50px
+    border-radius 20px
+    border-style solid
+    cursor pointer
+
+
+.input--size .select--size
+    width 250px
+    height 50px
+
+#root
+    font-family "Gotham"
+    background: black
+    color #222
+    font-weight 400
+    font-size 18px
+
+.app
+    background url(../assets/waves.svg) no-repeat
+    background-size  cover
+    // background #222222
+    overflow: hidden
+
+.button__standards
+    width 200px
+
+.app__background
+    width 70vw
+    height auto
+    margin auto
+    background: rgba( 255, 255, 255, 1 )
+    box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 )
+    backdrop-filter: blur( 9.5px )
+    border-radius: 10px
+    border: 1px solid rgba( 255, 255, 255, 0.18 )
+    padding 50px
+
+    h1
+        padding 30px
+        font-weight 800
+        text-align center
+        color #FC2E53
+        letter-spacing -1px;
+
+    h2  
+        font-weight 600
+
+
+.main__convert-opts
+    display inline-flex
+    flex-direction column
+    align-items center
+    justify-content center
+    width 50%
+    height 84%
+    margin-top 50px
+
+    .convert-opts--textDPI
+        margin-top 25px
+        margin-bottom 25px
+
+
+.main__pdf
+    display flex
+    justify-content center
+    align-items center  
+    float right
+    width 50%
+    height 557px
+    margin 32px 0px
+    border-style dashed
+
+    &::after
+        content ""
+        display flex
+        align-content center
+        justify-content center
+        width 150px
+        height 150px
+        position absolute
+        background url("../assets/pdf.png") no-repeat
+        background-size contain
+                
+
+    .main__pdf--submit
+        display flex
+        align-self flex-end
+        margin-bottom  30px
+
+input[type="file"]
+    display none
+
+
+.pdf--preview
+    display none
+
+.extension--name
+    margin 10px
+
+
+@import "./media.styl"
+@media $desktop-medium
+
+    .main__convert-opts h2
+        text-align center
+
+    .main__pdf
+        width: 45%
+
+@media $desktop-small
+    .main__pdf
+        &::after
+            width 100px
+            height 100px
+
+@media $tablet-medium
+    .app__background
+        height auto
+
+        .main__pdf
+            width auto
+            float none
+            height 350px
+            margin-bottom 0px
+
+        .main__convert-opts 
+            width 100%
+            margin-top 0px
+
+@media $mobile-large
+    #root
+        font-size 19px
+
+    .app__background
+        width 90vw
+        padding 20px
+
+        h1
+            padding 20px 0px
+
+        .main__pdf
+            height 300px
+            margin 5px
+
+
+            &::after    
+                margin-bottom: 50px;
+        
+        .main__convert-opts 
+            margin-top 0px
+            margin-bottom 30px
+
+            & label[for="extensão"]
+                margin 20px 10px
+
+
+    .button__standards
+        width 150px
+
+@media $mobile-medium
+
+    .main__pdf
+        background transparent
+
+    button.btn.btn-outline
+        width 200px

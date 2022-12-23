@@ -1,0 +1,10 @@
+{
+  "client": {
+    "title": "Emporio",
+    "dir": "emporio",
+    "extension": "png",
+    "dpi_x": "300",
+    "dpi_y": "300",
+    "base64": ""
+  }
+}
