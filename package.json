@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "concurrently  \"nodemon --legacy-watch ./www/src/server/api/api_server.js\" \"vite --host\"",
+    "dev": "concurrently  \"nodemon --legacy-watch ./www/src/server/api/api_server.js\" \"vite --host 0.0.0.0\"",
     "build": "vite build",
     "preview": "vite preview"
   },
